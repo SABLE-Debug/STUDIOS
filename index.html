@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#050404;color:#F2EDE4">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#050404">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>AKHARA — MASTER PLAYBOOK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark}
+html{background:#050404 !important;color:#F2EDE4 !important}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+a,a:visited,a:hover,a:active{color:inherit;text-decoration:none;-webkit-text-fill-color:inherit}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  background:#050404 !important;color:#F2EDE4 !important;font-family:'DM Mono',monospace;font-weight:300;
+  font-size:14px;line-height:1.7;letter-spacing:.02em;overflow-x:hidden;
+  min-height:100vh;cursor:none;
+}
+@media (max-width:800px){body{cursor:auto;font-size:13px}}
+
+::selection{background:#C9A84C;color:#050404}
+
+/* ============= BRAND VARIABLES ============= */
+:root{
+  --void:#050404;
+  --white:#F2EDE4;
+  --gold:#C9A84C;
+  --gold-deep:#B8964E;
+  --gold-soft:rgba(201,168,76,.4);
+  --gold-faint:rgba(201,168,76,.12);
+  --line:rgba(242,237,228,.12);
+  --line-strong:rgba(242,237,228,.28);
+  --serif:'Italiana','Cormorant Garamond','Playfair Display',Georgia,'Times New Roman',serif;
+  --mono:'DM Mono','SF Mono','Courier New',monospace;
+}
+
+/* ============= LOADER ============= */
+#loader{
+  position:fixed;inset:0;background:#050404;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .8s ease,visibility .8s ease;
+  perspective:1500px;
+}
+#loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+.loader-mark{
+  width:160px;height:160px;position:relative;
+  transform-style:preserve-3d;
+  animation:loader3D 8s linear infinite;
+}
+.loader-mark svg{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
+.loader-mark .ring-1{transform:rotateY(0deg)}
+.loader-mark .ring-2{transform:rotateY(60deg)}
+.loader-mark .ring-3{transform:rotateY(120deg)}
+.loader-mark circle,.loader-mark line{
+  fill:none;stroke:var(--gold);stroke-width:1.2;
+}
+.loader-mark .dot{fill:var(--gold);stroke:none}
+.loader-text{
+  position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:.5em;
+  color:var(--gold);text-transform:uppercase;
+  animation:loaderText 1.6s ease-in-out infinite;
+}
+@keyframes loader3D{
+  0%{transform:rotateX(20deg) rotateY(0)}
+  100%{transform:rotateX(20deg) rotateY(360deg)}
+}
+@keyframes loaderText{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ============= CUSTOM CURSOR ============= */
+.cursor,.cursor-ring{
+  position:fixed;top:0;left:0;pointer-events:none;z-index:9000;
+  border-radius:50%;transition:transform .1s ease;
+  will-change:transform;
+}
+.cursor{
+  width:6px;height:6px;background:var(--gold);
+  margin:-3px 0 0 -3px;
+}
+.cursor-ring{
+  width:36px;height:36px;border:1px solid var(--gold-soft);
+  margin:-18px 0 0 -18px;transition:transform .25s ease,width .3s ease,height .3s ease,border-color .3s ease;
+}
+.cursor-ring.hover{
+  width:60px;height:60px;margin:-30px 0 0 -30px;
+  border-color:var(--gold);
+}
+@media (max-width:800px){.cursor,.cursor-ring{display:none}}
+
+/* ============= FILM GRAIN ============= */
+.grain{
+  position:fixed;inset:0;pointer-events:none;z-index:8000;
+  opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  animation:grainShift 8s steps(10) infinite;
+}
+@keyframes grainShift{
+  0%,100%{transform:translate(0,0)}
+  10%{transform:translate(-5%,-10%)}
+  20%{transform:translate(-15%,5%)}
+  30%{transform:translate(7%,-25%)}
+  40%{transform:translate(-5%,25%)}
+  50%{transform:translate(-15%,10%)}
+  60%{transform:translate(15%,0)}
+  70%{transform:translate(0,15%)}
+  80%{transform:translate(3%,35%)}
+  90%{transform:translate(-10%,10%)}
+}
+
+/* ============= NAV ============= */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:7000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 40px;mix-blend-mode:difference;
+}
+@media (max-width:800px){nav{padding:18px 20px}}
+.nav-mark{font-family:var(--mono);font-size:11px;letter-spacing:.4em;color:var(--white);font-weight:400}
+.nav-meta{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--white);opacity:.6}
+@media (max-width:600px){.nav-meta{display:none}}
+
+/* ============= HERO ============= */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 40px 80px;position:relative;overflow:hidden;
+}
+@media (max-width:800px){.hero{padding:120px 20px 60px}}
+
+.hero-meridian{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(80vw,800px);height:min(80vw,800px);opacity:.15;
+  animation:meridianRotate 60s linear infinite;
+}
+@keyframes meridianRotate{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+.hero-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:40px;
+  opacity:0;animation:fadeUp 1.4s 1s forwards;
+}
+.hero h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(64px,14vw,220px);line-height:.92;letter-spacing:-.02em;
+  color:var(--white);margin-bottom:40px;
+}
+.hero h1 .word{
+  display:inline-block;opacity:0;transform:translateY(40px);
+  animation:wordReveal 1.4s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.hero h1 .word:nth-child(1){animation-delay:.2s}
+.hero h1 .word:nth-child(2){animation-delay:.35s}
+.hero h1 .word:nth-child(3){animation-delay:.5s}
+.hero h1 .word.gold{color:var(--gold);font-style:normal;font-weight:400}
+
+@keyframes wordReveal{to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+.hero-sub{
+  max-width:600px;font-size:15px;line-height:1.8;color:var(--white);opacity:.7;
+  margin-bottom:60px;
+  opacity:0;animation:fadeUp 1.4s 1.4s forwards;
+}
+.hero-meta{
+  display:flex;gap:40px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;color:var(--white);opacity:.5;
+  opacity:0;animation:fadeUp 1.4s 1.8s forwards;
+}
+@media (max-width:600px){.hero-meta{flex-direction:column;gap:12px}}
+
+/* ============= SECTION SHELL ============= */
+section{position:relative;padding:140px 40px;overflow:hidden}
+@media (max-width:800px){section{padding:100px 20px}}
+.section-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:30px;
+  display:flex;align-items:center;gap:14px;
+}
+.section-eyebrow::before{
+  content:'';width:40px;height:1px;background:var(--gold);
+}
+.section-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(40px,7vw,96px);line-height:1;letter-spacing:-.02em;
+  color:var(--white);margin-bottom:60px;max-width:900px;
+}
+.section-title em{color:var(--gold);font-weight:400;font-style:normal}
+
+/* ============= REVEAL SYSTEM ============= */
+.r,.r2,.r3{opacity:0;transform:translateY(40px);transition:opacity 1.2s cubic-bezier(.2,.8,.2,1),transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.r2{transition-delay:.15s}
+.r3{transition-delay:.3s}
+.r.in,.r2.in,.r3.in{opacity:1;transform:translateY(0)}
+
+/* ============= TICKER ============= */
+.ticker{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  overflow:hidden;padding:24px 0;background:var(--void);
+}
+.ticker-track{
+  display:flex;gap:80px;white-space:nowrap;
+  animation:ticker 40s linear infinite;
+}
+.ticker-item{
+  font-family:var(--serif);font-weight:400;
+  font-size:36px;color:var(--white);
+}
+.ticker-item .gold{color:var(--gold)}
+.ticker-dot{
+  width:6px;height:6px;background:var(--gold);border-radius:50%;
+  align-self:center;flex-shrink:0;
+}
+@keyframes ticker{to{transform:translateX(-50%)}}
+
+/* ============= SHOWCASE: COUNT-UP STATS ============= */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+@media (max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat{
+  padding:60px 30px;border-right:1px solid var(--line);position:relative;
+  overflow:hidden;
+}
+.stat:last-child{border-right:none}
+@media (max-width:800px){
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}
+}
+.stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;
+  transition:transform 1.2s cubic-bezier(.2,.8,.2,1);
+}
+.stat.in::before{transform:scaleX(1)}
+.stat-num{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(48px,7vw,96px);line-height:1;color:var(--gold);
+  margin-bottom:14px;
+}
+.stat-num .suffix{font-size:.5em;color:var(--white);opacity:.6;margin-left:4px}
+.stat-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--white);opacity:.6;
+}
+
+/* ============= SHOWCASE: FLIP CARDS ============= */
+.flip-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;
+}
+@media (max-width:800px){.flip-grid{grid-template-columns:1fr}}
+.flip{
+  perspective:1200px;aspect-ratio:3/4;cursor:pointer;
+}
+.flip-inner{
+  position:relative;width:100%;height:100%;
+  transition:transform 1s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;
+}
+.flip:hover .flip-inner,.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  border:1px solid var(--line-strong);padding:32px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  background:var(--void);
+}
+.flip-back{transform:rotateY(180deg);border-color:var(--gold);background:#0a0807}
+.flip-num{
+  font-family:var(--mono);font-size:11px;letter-spacing:.4em;color:var(--gold);
+}
+.flip-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:38px;line-height:1.05;color:var(--white);
+}
+.flip-back .flip-title{color:var(--gold);font-style:normal;font-weight:400;font-size:30px}
+.flip-body{font-size:13px;line-height:1.7;color:var(--white);opacity:.75}
+
+/* ============= SHOWCASE: ACCORDION ============= */
+.accordion{border-top:1px solid var(--line)}
+.acc-item{border-bottom:1px solid var(--line)}
+.acc-trigger{
+  width:100%;background:none;border:none;color:var(--white);
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(24px,3vw,38px);
+  text-align:left;padding:32px 0;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:24px;
+  transition:color .4s ease,padding-left .5s cubic-bezier(.2,.8,.2,1);
+}
+.acc-trigger:hover{color:var(--gold);padding-left:20px}
+.acc-trigger .plus{
+  font-family:var(--mono);font-size:24px;color:var(--gold);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);font-style:normal;
+}
+.acc-item.open .plus{transform:rotate(45deg)}
+.acc-content{
+  max-height:0;overflow:hidden;
+  transition:max-height .6s cubic-bezier(.2,.8,.2,1);
+}
+.acc-item.open .acc-content{max-height:1200px}
+.acc-inner{padding:0 0 40px;font-size:14px;line-height:1.9;color:var(--white);opacity:.75;max-width:780px}
+.acc-inner p{margin-bottom:16px}
+.acc-inner strong{color:var(--gold);font-weight:400;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:block;margin-top:24px;margin-bottom:8px}
+.acc-inner ul{padding-left:20px;margin:12px 0}
+.acc-inner li{margin-bottom:8px}
+
+/* ============= SHOWCASE: TIMELINE ============= */
+.timeline{position:relative;padding:40px 0;max-width:900px;margin:0 auto}
+.timeline::before{
+  content:'';position:absolute;left:11px;top:0;bottom:0;width:1px;
+  background:var(--line-strong);
+}
+@media (min-width:801px){
+  .timeline::before{left:50%}
+}
+.tl-item{
+  position:relative;padding-left:50px;margin-bottom:80px;
+}
+@media (min-width:801px){
+  .tl-item{padding-left:0;width:50%;}
+  .tl-item:nth-child(odd){padding-right:60px;text-align:right}
+  .tl-item:nth-child(even){margin-left:50%;padding-left:60px}
+}
+.tl-dot{
+  position:absolute;left:5px;top:8px;width:13px;height:13px;border-radius:50%;
+  background:var(--void);border:2px solid var(--gold);
+  animation:tlPulse 2s ease-in-out infinite;
+}
+@media (min-width:801px){
+  .tl-item:nth-child(odd) .tl-dot{left:auto;right:-7px}
+  .tl-item:nth-child(even) .tl-dot{left:-7px}
+}
+@keyframes tlPulse{
+  0%,100%{box-shadow:0 0 0 0 var(--gold-soft)}
+  50%{box-shadow:0 0 0 12px transparent}
+}
+.tl-phase{
+  font-family:var(--mono);font-size:10px;letter-spacing:.4em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.tl-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:32px;line-height:1.1;color:var(--white);margin-bottom:14px;
+}
+.tl-body{font-size:13px;line-height:1.7;color:var(--white);opacity:.7}
+.tl-meta{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--gold);
+  margin-top:12px;text-transform:uppercase;
+}
+
+/* ============= SHOWCASE: TERMINAL ============= */
+.terminal{
+  background:#0a0807;border:1px solid var(--line-strong);
+  border-radius:0;padding:30px;font-family:var(--mono);font-size:12px;
+  color:var(--white);max-width:900px;margin:0 auto;line-height:1.9;
+  position:relative;
+}
+.terminal::before{
+  content:'AKHARA :: SYSTEM';position:absolute;top:-1px;left:30px;
+  font-size:9px;letter-spacing:.4em;color:var(--gold);background:var(--void);
+  padding:4px 10px;transform:translateY(-50%);
+}
+.term-line{display:flex;gap:14px;margin-bottom:6px;opacity:0;animation:termLine .5s forwards}
+.term-prompt{color:var(--gold);flex-shrink:0}
+.term-text{color:var(--white);opacity:.9}
+.term-text.dim{opacity:.5}
+.term-text.gold{color:var(--gold);opacity:1}
+.term-cursor{display:inline-block;width:8px;height:14px;background:var(--gold);animation:cursorBlink 1s steps(2) infinite;vertical-align:middle;margin-left:4px}
+@keyframes termLine{to{opacity:1}}
+@keyframes cursorBlink{50%{opacity:0}}
+
+/* ============= SHOWCASE: TEXT EFFECTS ============= */
+.text-effects{display:grid;grid-template-columns:repeat(2,1fr);gap:60px;margin-top:60px}
+@media (max-width:800px){.text-effects{grid-template-columns:1fr;gap:40px}}
+.fx-card{border:1px solid var(--line);padding:50px 40px;position:relative;overflow:hidden;min-height:280px;display:flex;flex-direction:column;justify-content:space-between}
+.fx-label{font-family:var(--mono);font-size:9px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.fx-demo{font-family:var(--serif);font-size:48px;line-height:1;color:var(--white);font-weight:400}
+
+/* split text on hover */
+.fx-split .char{display:inline-block;transition:transform .5s cubic-bezier(.2,.8,.2,1),color .4s ease;cursor:pointer}
+.fx-split:hover .char{color:var(--gold)}
+.fx-split .char:hover{transform:translateY(-12px)}
+
+/* glitch text */
+.fx-glitch{position:relative;color:var(--white)}
+.fx-glitch::before,.fx-glitch::after{
+  content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;
+}
+.fx-glitch::before{color:var(--gold);animation:glitchA 3s infinite linear alternate-reverse;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}
+.fx-glitch::after{color:var(--white);animation:glitchB 3s infinite linear alternate-reverse;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%)}
+@keyframes glitchA{0%,100%{transform:translate(0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}}
+@keyframes glitchB{0%,100%{transform:translate(0)}20%{transform:translate(2px,-1px)}40%{transform:translate(-2px,1px)}60%{transform:translate(1px,-2px)}80%{transform:translate(-1px,2px)}}
+
+/* gradient sweep */
+.fx-sweep{
+  background:linear-gradient(90deg,var(--white) 0%,var(--white) 30%,var(--gold) 50%,var(--white) 70%,var(--white) 100%);
+  background-size:200% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:sweep 4s ease-in-out infinite;
+}
+@keyframes sweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* mask reveal */
+.fx-mask{display:inline-block;overflow:hidden;position:relative}
+.fx-mask::after{content:'';position:absolute;inset:0;background:var(--void);transform:translateX(-100%);animation:maskReveal 2s ease-in-out infinite}
+@keyframes maskReveal{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}}
+
+/* ============= SHOWCASE: MERIDIAN MARK 3D ============= */
+.meridian-stage{
+  height:500px;display:flex;align-items:center;justify-content:center;
+  perspective:1500px;position:relative;
+}
+.meridian-3d{
+  width:240px;height:240px;transform-style:preserve-3d;
+  animation:meridian3D 20s linear infinite;cursor:none;
+}
+@keyframes meridian3D{
+  0%{transform:rotateX(20deg) rotateY(0)}
+  100%{transform:rotateX(20deg) rotateY(360deg)}
+}
+.meridian-3d svg{position:absolute;top:0;left:0;width:100%;height:100%}
+.meridian-3d .ring-1{transform:rotateY(0deg)}
+.meridian-3d .ring-2{transform:rotateY(60deg)}
+.meridian-3d .ring-3{transform:rotateY(120deg)}
+.meridian-3d circle,.meridian-3d line{fill:none;stroke:var(--gold);stroke-width:1.2}
+.meridian-3d .dot{fill:var(--gold)}
+
+/* ============= SHOWCASE: MARQUEE WATERMARK ============= */
+.watermark-section{
+  position:relative;padding:120px 40px;overflow:hidden;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.watermark{
+  position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(120px,22vw,360px);line-height:.9;
+  color:transparent;-webkit-text-stroke:1px var(--gold-faint);
+  white-space:nowrap;animation:wmDrift 30s linear infinite;
+  pointer-events:none;
+}
+@keyframes wmDrift{to{transform:translate(-50%,-50%)}}
+
+/* ============= SHOWCASE: GRID OF TOOLS ============= */
+.tools-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-top:1px solid var(--line);
+}
+@media (max-width:800px){.tools-grid{grid-template-columns:repeat(2,1fr)}}
+.tool{
+  padding:32px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:8px;transition:background .4s ease;
+}
+.tool:nth-child(4n){border-right:none}
+@media (max-width:800px){
+  .tool{border-right:1px solid var(--line)}
+  .tool:nth-child(2n){border-right:none}
+  .tool:nth-child(4n){border-right:none}
+}
+.tool:hover{background:var(--gold-faint)}
+.tool-name{font-family:var(--serif);font-size:24px;color:var(--white)}
+.tool-purpose{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.tool-cost{font-family:var(--mono);font-size:11px;color:var(--white);opacity:.6}
+
+/* ============= QUOTE BLOCK ============= */
+.quote{
+  max-width:900px;margin:0 auto;text-align:center;padding:60px 0;
+}
+.quote-mark{
+  font-family:var(--serif);font-size:120px;line-height:1;color:var(--gold);
+  font-weight:400;display:block;margin-bottom:-30px;
+}
+.quote-text{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(28px,4vw,52px);line-height:1.2;color:var(--white);
+}
+.quote-attr{
+  font-family:var(--mono);font-size:10px;letter-spacing:.4em;
+  color:var(--gold);text-transform:uppercase;margin-top:30px;
+}
+
+/* ============= REVENUE LADDER ============= */
+.ladder{display:flex;flex-direction:column;gap:1px;background:var(--line)}
+.rung{
+  background:var(--void);padding:32px 30px;display:grid;
+  grid-template-columns:80px 1fr 200px 200px;gap:30px;align-items:center;
+  transition:background .4s ease,padding-left .5s cubic-bezier(.2,.8,.2,1);
+}
+.rung:hover{background:#0a0807;padding-left:50px}
+@media (max-width:800px){.rung{grid-template-columns:1fr;gap:14px;padding:24px 20px}}
+.rung-month{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--gold)}
+.rung-event{font-family:var(--serif);font-size:22px;color:var(--white)}
+.rung-clients{font-family:var(--mono);font-size:11px;color:var(--white);opacity:.7;letter-spacing:.1em}
+.rung-mrr{font-family:var(--serif);font-size:32px;color:var(--gold);text-align:right}
+@media (max-width:800px){.rung-mrr{text-align:left}}
+
+/* ============= TOGGLE STATE ============= */
+.toggle-section{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;align-items:center}
+@media (max-width:800px){.toggle-section{grid-template-columns:1fr;gap:40px}}
+.toggle{display:inline-flex;border:1px solid var(--line-strong);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase}
+.toggle button{
+  background:none;border:none;color:var(--white);padding:14px 22px;cursor:pointer;
+  font-family:inherit;font-size:inherit;letter-spacing:inherit;
+  transition:background .3s ease,color .3s ease;
+}
+.toggle button.active{background:var(--gold);color:var(--void)}
+.toggle-content{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.6;color:var(--white);min-height:200px}
+.toggle-content .gold{color:var(--gold)}
+
+/* ============= FOOTER ============= */
+footer{
+  padding:80px 40px 40px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:60px;
+}
+@media (max-width:800px){footer{padding:60px 20px 30px}}
+.footer-mark{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(48px,8vw,120px);line-height:.9;color:var(--white);
+}
+.footer-mark em{color:var(--gold);font-style:normal;font-weight:400}
+.footer-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--white);opacity:.5;
+  text-transform:uppercase;
+}
+@media (max-width:600px){.footer-meta{flex-direction:column;gap:14px;text-align:center}}
+
+/* ============= UTILITY ============= */
+.divider{
+  width:100%;height:1px;background:var(--line);margin:40px 0;
+  position:relative;overflow:hidden;
+}
+.divider::after{
+  content:'';position:absolute;left:-30%;top:0;width:30%;height:100%;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:dividerSweep 4s ease-in-out infinite;
+}
+@keyframes dividerSweep{to{left:130%}}
+
+</style>
+</head>
+<body style="background:#050404;color:#F2EDE4;margin:0">
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-mark">
+    <svg class="ring-1" viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/><circle cx="120" cy="120" r="20"/><line x1="120" y1="0" x2="120" y2="240"/><line x1="0" y1="120" x2="240" y2="120"/><circle class="dot" cx="120" cy="0" r="4"/></svg>
+    <svg class="ring-2" viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/></svg>
+    <svg class="ring-3" viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/></svg>
+    <div class="loader-text">AKHARA</div>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<!-- GRAIN -->
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-mark">AKHARA</div>
+  <div class="nav-meta">MASTER PLAYBOOK · V1</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="hero-meridian" viewBox="0 0 800 800">
+    <circle cx="400" cy="400" r="280" fill="none" stroke="#C9A84C" stroke-width="1"/>
+    <circle cx="400" cy="400" r="40" fill="none" stroke="#C9A84C" stroke-width="1"/>
+    <line x1="400" y1="20" x2="400" y2="780" stroke="#C9A84C" stroke-width="1"/>
+    <line x1="20" y1="400" x2="780" y2="400" stroke="#C9A84C" stroke-width="1"/>
+    <circle cx="400" cy="20" r="6" fill="#C9A84C"/>
+  </svg>
+
+  <div class="hero-eyebrow">MASTER PLAYBOOK · 21 → $50K MRR</div>
+  <h1>
+    <span class="word">From</span>
+    <span class="word gold">zero.</span>
+    <br>
+    <span class="word">To empire.</span>
+  </h1>
+  <p class="hero-sub">The complete operating manual. Logo. 3D animation flow. Tools. Hours. Revenue ladder. Ceiling. Lifestyle. Every step from the bedroom in Cape Town to the year-one goal. Built so a stranger could pick this up tomorrow and run AKHARA.</p>
+  <div class="hero-meta">
+    <span>FOUNDER · AKHANYA</span>
+    <span>SOLO BUILD</span>
+    <span>YEAR ONE</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item"><em class="gold">/</em> AI EMPLOYEE AGENCY</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item">5 WHALES <em class="gold">/</em> $50K MRR</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item">BRUTALIST LUXURY</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item">SOLO <em class="gold">/</em> AI-LEVERAGED</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item"><em class="gold">/</em> AI EMPLOYEE AGENCY</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item">5 WHALES <em class="gold">/</em> $50K MRR</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item">BRUTALIST LUXURY</span>
+    <span class="ticker-dot"></span>
+    <span class="ticker-item">SOLO <em class="gold">/</em> AI-LEVERAGED</span>
+    <span class="ticker-dot"></span>
+  </div>
+</div>
+
+<!-- PART 01 — THE GOAL -->
+<section>
+  <div class="section-eyebrow r">PART 01</div>
+  <h2 class="section-title r">The goal in <em>hard numbers.</em></h2>
+  <div class="stats-grid">
+    <div class="stat r"><div class="stat-num" data-count="50">0<span class="suffix">K</span></div><div class="stat-label">MRR Target</div></div>
+    <div class="stat r"><div class="stat-num" data-count="5">0</div><div class="stat-label">Whale Clients</div></div>
+    <div class="stat r"><div class="stat-num" data-count="12">0<span class="suffix">mo</span></div><div class="stat-label">Window</div></div>
+    <div class="stat r"><div class="stat-num" data-count="600">0<span class="suffix">K</span></div><div class="stat-label">Year One ARR</div></div>
+  </div>
+  <p style="max-width:780px;margin:60px 0 0;font-size:15px;line-height:1.9;color:var(--white);opacity:.75" class="r">Five clients. Each paying $10,000 a month. Each replacing a $250K human team with an AI Employee that runs 24/7. The unit economics work because AKHARA is a single founder leveraged by AI — gross margin sits at 82%. The ceiling solo, before hiring, is around $1.2M ARR before quality breaks.</p>
+</section>
+
+<!-- PART 02 — LOGO -->
+<section style="background:#0a0807">
+  <div class="section-eyebrow r">PART 02</div>
+  <h2 class="section-title r">The mark <em>before the brand.</em></h2>
+
+  <div class="meridian-stage">
+    <div class="meridian-3d">
+      <svg class="ring-1" viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/><circle cx="120" cy="120" r="20"/><line x1="120" y1="0" x2="120" y2="240"/><line x1="0" y1="120" x2="240" y2="120"/><circle class="dot" cx="120" cy="0" r="4"/></svg>
+      <svg class="ring-2" viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/></svg>
+      <svg class="ring-3" viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/></svg>
+    </div>
+  </div>
+
+  <div class="text-effects">
+    <div class="fx-card r">
+      <div>
+        <div class="fx-label">Construction</div>
+        <p style="font-size:14px;line-height:1.8;color:var(--white);opacity:.75">Outer ring at 200px. Inner ring at 40px. Crosshair extends 40px beyond outer circle on all four axes. Top dot sits at the apex of the vertical line, 6px diameter, gold-filled.</p>
+      </div>
+      <div class="fx-label" style="margin-top:0">Reads at 16px. Reads at 3000px. Same.</div>
+    </div>
+    <div class="fx-card r2">
+      <div>
+        <div class="fx-label">Why a crosshair</div>
+        <p style="font-size:14px;line-height:1.8;color:var(--white);opacity:.75">The crosshair extending past the circle is the entire brand thesis in a glyph. AKHARA doesn't fit inside a category. It crosses the boundary. Every other AI agency uses a sphere or a brain. This mark says intention, precision, target-acquired.</p>
+      </div>
+      <div class="fx-label" style="margin-top:0">A logo that cannot be confused</div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:80px"></div>
+
+  <div class="text-effects" style="margin-top:0">
+    <div class="fx-card r">
+      <div class="fx-label">Wordmark</div>
+      <div class="fx-demo fx-split"><span class="char">A</span><span class="char">K</span><span class="char">H</span><span class="char">A</span><span class="char">R</span><span class="char">A</span></div>
+      <div class="fx-label" style="margin-top:0">Cormorant Garamond · 300 italic</div>
+    </div>
+    <div class="fx-card r2">
+      <div class="fx-label">Treatment</div>
+      <div class="fx-demo fx-glitch" data-text="AKHARA">AKHARA</div>
+      <div class="fx-label" style="margin-top:0">Glitch state · system event</div>
+    </div>
+    <div class="fx-card r">
+      <div class="fx-label">Treatment</div>
+      <div class="fx-demo fx-sweep">AKHARA</div>
+      <div class="fx-label" style="margin-top:0">Light sweep · hero reveal</div>
+    </div>
+    <div class="fx-card r2">
+      <div class="fx-label">Subtitle</div>
+      <div class="fx-demo" style="font-size:14px;letter-spacing:.5em;font-style:normal;font-family:var(--mono);color:var(--gold)">AI-POWERED GROWTH AGENCY</div>
+      <div class="fx-label" style="margin-top:0">DM Mono · 400 · letterspaced</div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 03 — 3D ANIMATION FLOW -->
+<section>
+  <div class="section-eyebrow r">PART 03</div>
+  <h2 class="section-title r">From idea to <em>animated 3D asset.</em></h2>
+  <p style="max-width:780px;margin-bottom:60px;font-size:15px;line-height:1.9;color:var(--white);opacity:.75" class="r">The simplified flow. Higgsfield for cinematic video. CSS 3D and Three.js for interactive moments in code. Zero new tools to learn outside the locked stack. From idea to deployed asset: 5 hours of focused work.</p>
+
+  <div class="timeline">
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 01 · 30 min</div>
+      <div class="tl-title">Concept the asset</div>
+      <div class="tl-body">One sentence describing what it is and what it does. Vague concepts produce vague assets. "The Meridian mark rotates in 3D space and the camera orbits it on scroll." That's a usable concept.</div>
+      <div class="tl-meta">Tool · Pen and paper</div>
+    </div>
+    <div class="tl-item r2">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 02 · 1 hour</div>
+      <div class="tl-title">Reference library</div>
+      <div class="tl-body">Pull 5–10 video clips of the exact motion you want. Twitter, Vimeo, Awwwards, Bruno Simon, Lusion, Active Theory. Save to a folder. You're building a vocabulary your future self can point at.</div>
+      <div class="tl-meta">Tool · Save folder</div>
+    </div>
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 03 · 1 hour</div>
+      <div class="tl-title">Generate base imagery in Higgsfield</div>
+      <div class="tl-body">Concept the asset visually. The Meridian mark, abstract architectural forms, dark spaces with gold light. Higgsfield generates the still frames you'll animate from.</div>
+      <div class="tl-meta">Tool · Higgsfield · in stack</div>
+    </div>
+    <div class="tl-item r2">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 04 · 30 min</div>
+      <div class="tl-title">Cinematic camera moves</div>
+      <div class="tl-body">Drop the still into Higgsfield's image-to-video. Pick a camera move — orbit, dolly push, slow rotate. Generate at 4K. Export as muted autoplay loop. This is the hero video.</div>
+      <div class="tl-meta">Same tool · same session</div>
+    </div>
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 05 · 2 hours</div>
+      <div class="tl-title">Interactive 3D in code</div>
+      <div class="tl-body">For things that need to react to scroll or cursor — CSS 3D transforms for the lighter moments, Three.js for the heavy ones. The Meridian mark in this playbook is pure CSS 3D, no library. Free, fast, native.</div>
+      <div class="tl-meta">Tool · VS Code · in stack</div>
+    </div>
+    <div class="tl-item r2">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 06 · 30 min</div>
+      <div class="tl-title">Compose in HTML</div>
+      <div class="tl-body">Drop the Higgsfield video into a `&lt;video autoplay muted loop&gt;` tag. Drop the CSS 3D mark inline. Layer typography on top with absolute positioning. Single HTML file, GitHub Pages-ready.</div>
+      <div class="tl-meta">Output · single file</div>
+    </div>
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Step 07 · 30 min</div>
+      <div class="tl-title">Ship</div>
+      <div class="tl-body">Push to GitHub. GitHub Pages serves it. The asset is live on the production AKHARA site. From idea to deployed 3D asset, 5 hours of work.</div>
+      <div class="tl-meta">Output · live URL</div>
+    </div>
+  </div>
+
+  <div class="terminal r" style="margin-top:80px">
+    <div class="term-line"><span class="term-prompt">$</span><span class="term-text">higgsfield render meridian-orbit.mp4</span></div>
+    <div class="term-line"><span class="term-prompt">→</span><span class="term-text dim">Generating · 4K · 6s loop · cinematic</span></div>
+    <div class="term-line"><span class="term-prompt">✓</span><span class="term-text gold">Asset ready · meridian-orbit.mp4 · 1.8MB</span></div>
+    <div class="term-line"><span class="term-prompt">$</span><span class="term-text">git add . && git commit -m "feat: meridian hero loop"</span></div>
+    <div class="term-line"><span class="term-prompt">$</span><span class="term-text">git push origin main</span></div>
+    <div class="term-line"><span class="term-prompt">→</span><span class="term-text dim">github pages · building · 14s</span></div>
+    <div class="term-line"><span class="term-prompt">✓</span><span class="term-text gold">Live · akhara.co<span class="term-cursor"></span></span></div>
+  </div>
+</section>
+
+<!-- WATERMARK BREAK -->
+<div class="watermark-section">
+  <div class="watermark">DEPLOY · DOMINATE · DEPLOY · DOMINATE · DEPLOY ·</div>
+  <div class="quote" style="position:relative;z-index:2">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">Walks into a room before you do.</p>
+    <p class="quote-attr">AKHARA · Brand thesis</p>
+  </div>
+</div>
+
+<!-- PART 04 — REVENUE LADDER -->
+<section>
+  <div class="section-eyebrow r">PART 04</div>
+  <h2 class="section-title r">Month by month · <em>revenue ladder.</em></h2>
+
+  <div class="ladder">
+    <div class="rung r">
+      <div class="rung-month">M01</div>
+      <div class="rung-event">Site live · Outreach starts</div>
+      <div class="rung-clients">0 clients · setup phase</div>
+      <div class="rung-mrr">$0</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M02</div>
+      <div class="rung-event">First whale signs</div>
+      <div class="rung-clients">1 client · Tier A vertical</div>
+      <div class="rung-mrr">$10K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M03</div>
+      <div class="rung-event">First case study live</div>
+      <div class="rung-clients">1 client · proof asset built</div>
+      <div class="rung-mrr">$10K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M04</div>
+      <div class="rung-event">Whale #2</div>
+      <div class="rung-clients">2 clients · referral or warm</div>
+      <div class="rung-mrr">$20K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M06</div>
+      <div class="rung-event">Whale #3</div>
+      <div class="rung-clients">3 clients · case study driven</div>
+      <div class="rung-mrr">$30K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M09</div>
+      <div class="rung-event">Whale #4</div>
+      <div class="rung-clients">4 clients · inbound starts hitting</div>
+      <div class="rung-mrr">$40K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M12</div>
+      <div class="rung-event">Whale #5 — goal hit</div>
+      <div class="rung-clients">5 clients · year-one closed</div>
+      <div class="rung-mrr">$50K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M18</div>
+      <div class="rung-event">First hire · ops lead</div>
+      <div class="rung-clients">7 clients · breaking solo ceiling</div>
+      <div class="rung-mrr">$70K</div>
+    </div>
+    <div class="rung r">
+      <div class="rung-month">M24</div>
+      <div class="rung-event">Solo ceiling tested</div>
+      <div class="rung-clients">10 clients · $1.2M ARR</div>
+      <div class="rung-mrr">$100K</div>
+    </div>
+  </div>
+
+  <p style="max-width:780px;margin:60px 0 0;font-size:13px;line-height:1.9;color:var(--white);opacity:.6;font-family:var(--mono)" class="r">YEAR ONE: $390K collected · YEAR TWO PROJECTION: $1.1M collected · CEILING SOLO: ~$1.2M ARR before quality fractures</p>
+</section>
+
+<!-- PART 05 — DAILY OPERATING SYSTEM -->
+<section style="background:#0a0807">
+  <div class="section-eyebrow r">PART 05</div>
+  <h2 class="section-title r">The daily <em>operating rhythm.</em></h2>
+
+  <div class="toggle-section">
+    <div>
+      <div class="toggle r" id="phaseToggle">
+        <button class="active" data-phase="0">M0–3</button>
+        <button data-phase="1">M3–6</button>
+        <button data-phase="2">M6–12</button>
+      </div>
+      <p style="margin-top:30px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase" class="r">Switch · daily schedule by phase</p>
+    </div>
+    <div class="toggle-content r" id="phaseContent">
+      <div data-phase-content="0">
+        <p style="margin-bottom:14px"><span class="gold">Free day · 3–5 focused hours</span></p>
+        <p>· Triage Closer flags · 30 min</p>
+        <p>· Discovery calls (booked by Closer) · 1–2 hours</p>
+        <p>· Build mode · site, prompts, Architect tuning · 2 hours</p>
+        <p>· Content review · publish drafts · 15 min</p>
+        <p style="margin-top:18px;opacity:.6">School/flying day · 30 min triage only · Closer keeps running</p>
+      </div>
+      <div data-phase-content="1" style="display:none">
+        <p style="margin-bottom:14px"><span class="gold">Free day · 2–4 focused hours</span></p>
+        <p>· Client Slack channels review · 30 min</p>
+        <p>· Discovery calls (warmer pipeline) · 1 hour</p>
+        <p>· New client onboarding sign-offs · 1 hour</p>
+        <p>· Case study direction · content review · 30 min</p>
+        <p style="margin-top:18px;opacity:.6">School/flying day · Operator handles existing clients autonomously</p>
+      </div>
+      <div data-phase-content="2" style="display:none">
+        <p style="margin-bottom:14px"><span class="gold">Free day · 1–3 focused hours</span></p>
+        <p>· Strategy + roadmap · 1 hour</p>
+        <p>· Whale-level prospect calls · 1 hour</p>
+        <p>· Existing client QBRs · 30 min</p>
+        <p>· Brand visibility · publish · 15 min</p>
+        <p style="margin-top:18px;opacity:.6">Inbound hits 60% of new business · the agency runs whether you log in or not</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 06 — TOOL STACK -->
+<section>
+  <div class="section-eyebrow r">PART 06</div>
+  <h2 class="section-title r">The locked <em>stack.</em></h2>
+  <p style="max-width:780px;margin-bottom:30px;font-size:15px;line-height:1.9;color:var(--white);opacity:.75" class="r">One rule: the stack today is the stack at $50K MRR. Same tools, same tiers. No "we'll add it when we scale" drift. Every tool here earns its slot from day one or it doesn't make the list.</p>
+  <p style="max-width:780px;margin-bottom:40px;font-size:13px;line-height:1.9;color:var(--gold);font-family:var(--mono);letter-spacing:.05em" class="r">TOTAL · ~$280/mo · LOCKED · REPLACES ~$35K/MO IN HUMAN EQUIVALENTS</p>
+
+  <div class="tools-grid">
+    <div class="tool"><div class="tool-name">Claude</div><div class="tool-purpose">Core intelligence · all employees</div><div class="tool-cost">$200/mo</div></div>
+    <div class="tool"><div class="tool-name">Make.com</div><div class="tool-purpose">Workflow engine · Closer + Operator</div><div class="tool-cost">$29/mo</div></div>
+    <div class="tool"><div class="tool-name">Notion</div><div class="tool-purpose">Brain · contracts · client docs</div><div class="tool-cost">$10/mo</div></div>
+    <div class="tool"><div class="tool-name">Slack</div><div class="tool-purpose">Client channels · notifications</div><div class="tool-cost">$8/mo</div></div>
+    <div class="tool"><div class="tool-name">Calendly</div><div class="tool-purpose">Discovery call auto-book</div><div class="tool-cost">$12/mo</div></div>
+    <div class="tool"><div class="tool-name">Higgsfield</div><div class="tool-purpose">Cinematic AI video · hero loops</div><div class="tool-cost">$15/mo</div></div>
+    <div class="tool"><div class="tool-name">Loom</div><div class="tool-purpose">60-sec demo recordings</div><div class="tool-cost">Free</div></div>
+    <div class="tool"><div class="tool-name">Figma</div><div class="tool-purpose">Design system · brand assets</div><div class="tool-cost">Free</div></div>
+    <div class="tool"><div class="tool-name">GitHub Pages</div><div class="tool-purpose">Site hosting · zero downtime</div><div class="tool-cost">Free</div></div>
+    <div class="tool"><div class="tool-name">VS Code</div><div class="tool-purpose">Code · with Claude API</div><div class="tool-cost">Free</div></div>
+    <div class="tool"><div class="tool-name">Wise</div><div class="tool-purpose">Global client payments</div><div class="tool-cost">Per txn</div></div>
+    <div class="tool"><div class="tool-name">Stripe</div><div class="tool-purpose">Subscriptions · automated billing</div><div class="tool-cost">2.9%</div></div>
+  </div>
+
+  <div style="max-width:780px;margin-top:80px;padding:32px;border:1px solid var(--gold);background:rgba(201,168,76,.04)" class="r">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:18px">The locked stack rule</div>
+    <p style="font-size:14px;line-height:1.9;color:var(--white);opacity:.85;margin-bottom:14px">Either it's in the stack from day one or it's never in the stack. No "we'll add Apollo at $5K MRR." No "PandaDoc once we have 5 clients." No "Spline when the design needs it."</p>
+    <p style="font-size:14px;line-height:1.9;color:var(--white);opacity:.85;margin-bottom:14px">The free tools stay free at scale. The paid tools are paid because they earn their cost on day one. Tool sprawl is how solo founders end up with $1,800/mo in subscriptions and $40K MRR. AKHARA pays $280/mo whether MRR is $0 or $50K.</p>
+    <p style="font-size:14px;line-height:1.9;color:var(--gold);font-family:var(--mono);letter-spacing:.04em">SOFTWARE GROSS MARGIN AT $50K MRR · 99.4%</p>
+  </div>
+</section>
+
+<!-- PART 07 — LIFESTYLE -->
+<section style="background:#0a0807">
+  <div class="section-eyebrow r">PART 07</div>
+  <h2 class="section-title r">The lifestyle <em>at the goal.</em></h2>
+
+  <div class="accordion">
+    <div class="acc-item">
+      <button class="acc-trigger">Where you live <span class="plus">+</span></button>
+      <div class="acc-content"><div class="acc-inner">
+        <p>$50K MRR with 82% gross margin nets roughly $32K/month after software, taxes, and reinvestment. That number doesn't tie you to South Africa, the US, or anywhere else.</p>
+        <strong>Realistic year-one base</strong>
+        <p>Cape Town, Lisbon, Mexico City, Bali, Bangkok. Living costs under $3K/month in any of them. Housing in the top 10% of the local market. Time zone flexible because every client interaction is async-first by design.</p>
+        <strong>Year two and beyond</strong>
+        <p>Once 5 whales lock and one case study is public, location is purely preference. Move every quarter if it suits. The agency runs on the same Notion brain regardless of your postcode.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger">How many hours <span class="plus">+</span></button>
+      <div class="acc-content"><div class="acc-inner">
+        <p>The Closer runs 18 hours a day. The Operator runs 24/7. Your hours are spent reviewing, deciding, and showing up to discovery calls. Not grinding manual outreach.</p>
+        <strong>Months 0–3</strong>
+        <p>3–5 focused hours on free days. Less on flying or school days. Output is condensed — most of the work you'd do manually is already done by The Closer overnight. You wake up to triage, approvals, and 2–3 booked discovery calls.</p>
+        <strong>Months 3–6</strong>
+        <p>2–4 hours on free days. The Architect runs onboarding for new clients. The Operator handles every existing client. Your time goes to discovery calls (booked by The Closer), quality control, and pricing decisions.</p>
+        <strong>Months 6–12</strong>
+        <p>1–3 hours on free days. The agency runs whether you log in or not. You spend time on strategy, whale-level prospect calls, and brand. Most days, the work is choosing what not to do.</p>
+        <strong>Year two ceiling</strong>
+        <p>Solo, sustainably, the cap is around $1.2M ARR. Past that, quality fractures unless you hire. The first hire is an ops lead at $60K/year. The second is a junior strategist. From there it's a real agency, not a solo flex.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger">What you own <span class="plus">+</span></button>
+      <div class="acc-content"><div class="acc-inner">
+        <p>The brand. The system prompts (proprietary IP). The case studies. The Notion brain. The buyer intelligence file. The AKHARA Wordmark and Meridian Mark. Trademarked at month 9.</p>
+        <strong>What you don't own</strong>
+        <p>Claude, Make, Slack, Notion. You rent the infrastructure. Your moat isn't the tools — it's the brand, the prompt library, the buyer language packs, the proven results, and the operator.</p>
+        <strong>Exit optionality</strong>
+        <p>At $1M ARR with strong retention, AKHARA is sellable to a private equity rollup at 4–6x EBITDA. That's a $3–5M exit on a 18–30 month build. Or it's never sold and it compounds. Both options are real.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger">What it costs <span class="plus">+</span></button>
+      <div class="acc-content"><div class="acc-inner">
+        <p>Not money. Focus, taste, and the willingness to keep showing up to discovery calls until your close rate sharpens. The first 90 days are condensed, not endless — most of the work runs while you sleep.</p>
+        <strong>Cost</strong>
+        <ul>
+          <li>Friendships that get loose maintenance in M0–3</li>
+          <li>Late nights on weeks 4 and 12 specifically</li>
+          <li>The constant temptation to discount, to hand-hold, to over-explain</li>
+        </ul>
+        <strong>Reward</strong>
+        <p>By month 12: an asset that generates $50K/month while you sleep. By month 24: a sellable business or a compounding income stream. By 30: optional retirement on $5M+ if it scales.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger">What can break it <span class="plus">+</span></button>
+      <div class="acc-content"><div class="acc-inner">
+        <p>Three things kill agencies at this stage:</p>
+        <strong>01 · Discounting</strong>
+        <p>The 10% annual prepay is the only allowed discount. Every other "just this once" cut signals to the universe that the price isn't real. The brand dies the day you cave.</p>
+        <strong>02 · Bad clients</strong>
+        <p>One nightmare client at month 3 eats 40% of your hours and produces 0% of your revenue growth. Fire them. The Closer screens for fit before discovery — use it ruthlessly.</p>
+        <strong>03 · Drift</strong>
+        <p>Building features instead of selling. Iterating the site instead of cold-calling. The product is finished enough at v1. The next 9 months are sales, sales, sales.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 08 — HOURS BREAKDOWN -->
+<section>
+  <div class="section-eyebrow r">PART 08</div>
+  <h2 class="section-title r">Where the <em>hours go.</em></h2>
+
+  <div class="flip-grid">
+    <div class="flip">
+      <div class="flip-inner">
+        <div class="flip-face">
+          <div class="flip-num">01 · ACQUIRE</div>
+          <div class="flip-title">Outreach</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-num">Closer runs · You review</div>
+          <div class="flip-title">200+ messages/day automated by The Closer across Tier A categories. You approve flagged replies only.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip">
+      <div class="flip-inner">
+        <div class="flip-face">
+          <div class="flip-num">02 · CONVERT</div>
+          <div class="flip-title">Discovery</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-num">2–3 calls/day · your only manual sales work</div>
+          <div class="flip-title">30 min each. Booked by The Closer. 1-in-3 close rate after the first 90 days of practice.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip">
+      <div class="flip-inner">
+        <div class="flip-face">
+          <div class="flip-num">03 · BUILD</div>
+          <div class="flip-title">Deployment</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-num">Per client · 6 hrs of your time</div>
+          <div class="flip-title">Brand voice review, prompt approval, integration sign-off. The Architect runs the build. You make the calls that matter.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip">
+      <div class="flip-inner">
+        <div class="flip-face">
+          <div class="flip-num">04 · DELIVER</div>
+          <div class="flip-title">Operate</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-num">Per client · 1 hr/week of your time</div>
+          <div class="flip-title">The Operator runs daily. You read the weekly report, approve any pricing or scope decisions, run the monthly QBR.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip">
+      <div class="flip-inner">
+        <div class="flip-face">
+          <div class="flip-num">05 · BRAND</div>
+          <div class="flip-title">Visibility</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-num">15 min daily · drafted by AI</div>
+          <div class="flip-title">One Twitter post. One LinkedIn post. The Strategist drafts. You publish. Compound interest of public presence.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip">
+      <div class="flip-inner">
+        <div class="flip-face">
+          <div class="flip-num">06 · STRATEGY</div>
+          <div class="flip-title">Build the next layer</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-num">2 hrs Sunday · CEO work</div>
+          <div class="flip-title">Market reads, pricing decisions, content roadmap. The one block of the week only you can run.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 09 — THE PHASES -->
+<section style="background:#0a0807">
+  <div class="section-eyebrow r">PART 09</div>
+  <h2 class="section-title r">The seven <em>launch phases.</em></h2>
+
+  <div class="timeline">
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 01 · Week 1</div>
+      <div class="tl-title">Brand lock</div>
+      <div class="tl-body">Logo final. Wordmark final. Palette and type system locked. Notion brain set up with brand voice, design rules, tone bible.</div>
+    </div>
+    <div class="tl-item r2">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 02 · Week 2</div>
+      <div class="tl-title">Internal AI Employees</div>
+      <div class="tl-body">The Closer, Operator, Architect, Strategist deployed inside AKHARA's own Make + Slack stack. They run AKHARA's outreach before they run a client's.</div>
+    </div>
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 03 · Week 3</div>
+      <div class="tl-title">Outreach engine</div>
+      <div class="tl-body">The Closer's outreach engine goes live. Make.com workflows pull Tier A prospects from public sources, draft messages, send across DM and email. First 500 prospects in motion.</div>
+    </div>
+    <div class="tl-item r2">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 04 · Week 4</div>
+      <div class="tl-title">Buyer intelligence</div>
+      <div class="tl-body">All 12 categories mapped. Language packs locked. Objection deep file complete. Loom library recorded.</div>
+    </div>
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 05 · Weeks 5–6</div>
+      <div class="tl-title">Discovery muscle</div>
+      <div class="tl-body">First 30 calls. Confidence calibration. Refine the 7-step close until it's reflex. Build the proposal template that closes.</div>
+    </div>
+    <div class="tl-item r2">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 06 · Weeks 7–8</div>
+      <div class="tl-title">First whale</div>
+      <div class="tl-body">Sign client one. Setup fee paid. 14-day deployment. First Slack channel goes live. Manual mode for 7 days. Semi-auto for 14. Live.</div>
+    </div>
+    <div class="tl-item r">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Phase 07 · Months 3+</div>
+      <div class="tl-title">akhara.co live</div>
+      <div class="tl-body">Production website. Case study from client one. Public proof. Inbound starts trickling. The flywheel begins.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 10 — DAY ZERO -->
+<section>
+  <div class="section-eyebrow r">PART 10</div>
+  <h2 class="section-title r">Day zero · <em>the first 24 hours.</em></h2>
+  <p style="max-width:780px;margin-bottom:40px;font-size:15px;line-height:1.9;color:var(--white);opacity:.75" class="r">A stranger picking up this playbook tomorrow. Hour by hour. Read the playbook. Open one terminal. Start.</p>
+
+  <div class="terminal r">
+    <div class="term-line"><span class="term-prompt">00:00</span><span class="term-text">Read AKHARA_MASTER_CONTEXT, BUYER_INTELLIGENCE, OPERATING_SYSTEM end-to-end.</span></div>
+    <div class="term-line"><span class="term-prompt">02:00</span><span class="term-text">Buy domain · akhara.co · namecheap or cloudflare registrar.</span></div>
+    <div class="term-line"><span class="term-prompt">03:00</span><span class="term-text">Open Higgsfield. Generate the first hero loop. Export 4K MP4.</span></div>
+    <div class="term-line"><span class="term-prompt">07:00</span><span class="term-text">Build v1 of the AKHARA homepage in a single HTML file. Brutalist luxury. Mobile-first.</span></div>
+    <div class="term-line"><span class="term-prompt">10:00</span><span class="term-text">Push to GitHub. Enable Pages. Point akhara.co to it. Live.</span></div>
+    <div class="term-line"><span class="term-prompt">11:00</span><span class="term-text">Build the prospect-finder Make.com workflow. Pull 50 Tier A prospects.</span></div>
+    <div class="term-line"><span class="term-prompt">12:00</span><span class="term-text">Send first 10 cold DMs personally. Use the OPERATING_SYSTEM templates.</span></div>
+    <div class="term-line"><span class="term-prompt">14:00</span><span class="term-text">Record the first 5 Loom demos. One per Tier A category.</span></div>
+    <div class="term-line"><span class="term-prompt">17:00</span><span class="term-text">Set up Calendly. Connect to email. Auto-confirm + reminder.</span></div>
+    <div class="term-line"><span class="term-prompt">19:00</span><span class="term-text">Build contract template in Notion. Test signature flow with a friend.</span></div>
+    <div class="term-line"><span class="term-prompt">21:00</span><span class="term-text">Set up Wise + Stripe. Test invoice flow.</span></div>
+    <div class="term-line"><span class="term-prompt">23:00</span><span class="term-text gold">Day one closed. The Closer runs through the night.<span class="term-cursor"></span></span></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-mark r">
+    Build the <em>arena.</em><br>Win the <em>fight.</em>
+  </div>
+  <div class="footer-meta">
+    <span>AKHARA · MASTER PLAYBOOK · V1.0</span>
+    <span>EST. 2026</span>
+    <span>BRUTALIST LUXURY · SOLO BUILD</span>
+  </div>
+</footer>
+
+<script>
+// ============ LOADER ============
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('gone'),900);
+});
+setTimeout(()=>{const l=document.getElementById('loader');if(l)l.classList.add('gone');},4500);
+
+// ============ CURSOR ============
+const cursor=document.querySelector('.cursor');
+const ring=document.querySelector('.cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+window.addEventListener('mousemove',(e)=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.transform=`translate(${mx}px,${my}px)`;
+});
+function animateRing(){
+  rx+=(mx-rx)*.18;
+  ry+=(my-ry)*.18;
+  ring.style.transform=`translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a,button,.flip,.acc-trigger,.fx-split .char,.tool').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));
+});
+
+// ============ REVEALS ============
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');observer.unobserve(e.target);}
+  });
+},{threshold:.12,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.r,.r2,.r3,.stat').forEach(el=>observer.observe(el));
+
+// ============ COUNT-UP STATS ============
+const countObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el=e.target;
+      const target=parseInt(el.dataset.count);
+      const suffix=el.querySelector('.suffix');
+      const suffixHTML=suffix?suffix.outerHTML:'';
+      let current=0;
+      const duration=2000;
+      const start=performance.now();
+      function tick(now){
+        const p=Math.min((now-start)/duration,1);
+        const eased=1-Math.pow(1-p,3);
+        current=Math.floor(eased*target);
+        el.innerHTML=current+suffixHTML;
+        if(p<1)requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      countObserver.unobserve(el);
+    }
+  });
+},{threshold:.4});
+document.querySelectorAll('.stat-num[data-count]').forEach(el=>countObserver.observe(el));
+
+// ============ ACCORDION ============
+document.querySelectorAll('.acc-trigger').forEach(t=>{
+  t.addEventListener('click',()=>{
+    t.parentElement.classList.toggle('open');
+  });
+});
+
+// ============ PHASE TOGGLE ============
+const toggleBtns=document.querySelectorAll('#phaseToggle button');
+const phaseContents=document.querySelectorAll('[data-phase-content]');
+toggleBtns.forEach(b=>{
+  b.addEventListener('click',()=>{
+    toggleBtns.forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const p=b.dataset.phase;
+    phaseContents.forEach(c=>{
+      c.style.display=c.dataset.phaseContent===p?'block':'none';
+    });
+  });
+});
+
+// ============ FLIP CARDS (mobile tap support) ============
+document.querySelectorAll('.flip').forEach(f=>{
+  f.addEventListener('click',()=>f.classList.toggle('flipped'));
+});
+
+// ============ TICKER PAUSE ON HOVER ============
+const ticker=document.querySelector('.ticker-track');
+if(ticker){
+  ticker.parentElement.addEventListener('mouseenter',()=>ticker.style.animationPlayState='paused');
+  ticker.parentElement.addEventListener('mouseleave',()=>ticker.style.animationPlayState='running');
+}
+
+// ============ PARALLAX HERO MERIDIAN ============
+const heroMer=document.querySelector('.hero-meridian');
+if(heroMer){
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    if(y<window.innerHeight*1.2){
+      heroMer.style.transform=`translate(-50%,calc(-50% + ${y*.2}px))`;
+    }
+  },{passive:true});
+}
+</script>
+</body>
+</html>
